@@ -785,25 +785,25 @@ export const ChatScreen = () => {
     };
 
     const handlePartnerTyping = (payload: any) => {
-      if (payload.userId === partner.id && payload.chatId === activeChatId) {
+      if (partner !== null && payload.userId === partner.id && payload.chatId === activeChatId) {
         setIsPartnerTyping(true);
       }
     };
 
     const handlePartnerStopTyping = (payload: any) => {
-      if (payload.userId === partner.id && payload.chatId === activeChatId) {
+      if (partner !== null && payload.userId === partner.id && payload.chatId === activeChatId) {
         setIsPartnerTyping(false);
       }
     };
 
     const handlePartnerOnline = (payload: { userId: string; lastSeenAt: string }) => {
-      if (payload.userId === partner.id) {
+      if (partner !== null && payload.userId === partner.id) {
         setPartner((prev: any) => prev !== null ? { ...prev, online: true, lastSeenAt: payload.lastSeenAt } : null);
       }
     };
 
     const handlePartnerOffline = (payload: { userId: string; lastSeenAt: string }) => {
-      if (payload.userId === partner.id) {
+      if (partner !== null && payload.userId === partner.id) {
         setPartner((prev: any) => prev !== null ? { ...prev, online: false, lastSeenAt: payload.lastSeenAt } : null);
       }
     };

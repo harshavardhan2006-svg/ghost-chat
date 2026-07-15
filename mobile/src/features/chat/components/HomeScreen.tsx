@@ -182,7 +182,7 @@ export const HomeScreen = () => {
     const socket = connectSocket(accessToken);
 
     const handleOnline = (payload: { userId: string; lastSeenAt: string }) => {
-      if (payload.userId === partner.id) {
+      if (partner !== null && payload.userId === partner.id) {
         setPartner((prev) =>
           prev !== null
             ? { ...prev, online: true, lastSeenAt: payload.lastSeenAt }
@@ -192,7 +192,7 @@ export const HomeScreen = () => {
     };
 
     const handleOffline = (payload: { userId: string; lastSeenAt: string }) => {
-      if (payload.userId === partner.id) {
+      if (partner !== null && payload.userId === partner.id) {
         setPartner((prev) =>
           prev !== null
             ? { ...prev, online: false, lastSeenAt: payload.lastSeenAt }

@@ -3,6 +3,7 @@ import { createContext, type ReactNode, useCallback, useContext, useEffect, useM
 import { authApi } from './services/auth-api';
 import { clearSession, loadSession, saveSession } from './services/token-storage';
 import { type AuthSession } from './types/auth.types';
+import { useAuthStore } from './store/auth-store';
 
 type AuthContextValue = {
   session: AuthSession | null;
@@ -22,6 +23,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [booting, setBooting] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Keep Zustand auth-store in sync with Context session
+  useEffect(() => {
+    const currentZustandToken = useAuthStore.getState().accessToken;
+    const contextToken = session?.tokens.accessToken ?? null;
+    if (currentZustandToken !== contextToken) {
+      void useAuthStore.getState().setSession(session);
+    }
+  }, [session]);
 
   const persistSession = useCallback(async (nextSession: AuthSession): Promise<void> => {
     await saveSession(nextSession);
