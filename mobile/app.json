@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "Ghost",
+    "slug": "ghost",
+    "scheme": "ghost",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "plugins": [
+      "expo-image",
+      "expo-audio",
+      "expo-secure-store"
+    ],
+    "extra": {
+      "apiUrl": "https://ghost-chat-backend-hq1v.onrender.com/api/v1"
+    }
+  }
+}
