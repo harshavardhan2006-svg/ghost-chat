@@ -7,16 +7,12 @@
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
     "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#151718"
-    },
-    "newArchEnabled": true,
     "plugins": [
       "expo-image",
       "expo-audio",
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-font",
+      "expo-asset"
     ],
     "extra": {
       "apiUrl": "https://ghost-chat-backend-hq1v.onrender.com/api/v1",
