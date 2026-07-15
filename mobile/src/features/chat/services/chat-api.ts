@@ -10,6 +10,13 @@ export const chatApi = {
       accessToken,
     }),
 
+  unpair: async (accessToken: string): Promise<void> => {
+    await requestApi('/pairing/unpair', {
+      method: 'POST',
+      accessToken,
+    });
+  },
+
   listMessages: async (
     chatId: string,
     accessToken: string,

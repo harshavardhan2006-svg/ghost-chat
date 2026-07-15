@@ -14,3 +14,14 @@ export const emitPairingCompleted = (payload: PairingCompletedResponse): void =>
     io.to(userRoom(userId)).emit(socketEvents.pairingCompleted, payload);
   }
 };
+
+export const emitUnpaired = (userId: string, partnerId: string): void => {
+  const io = getSocketServer();
+
+  if (io === null) {
+    return;
+  }
+
+  io.to(userRoom(userId)).emit(socketEvents.unpaired, { userId, partnerId });
+  io.to(userRoom(partnerId)).emit(socketEvents.unpaired, { userId, partnerId });
+};

@@ -9,6 +9,7 @@ import { ChatModel, type ChatDocument } from '../models/chat.model';
 import { FriendshipModel, type FriendshipDocument } from '../models/friendship.model';
 import { PairingCodeModel } from '../models/pairing-code.model';
 import { getPresence } from '../../realtime/services/presence.service';
+import { MessageModel } from '../../messages/models/message.model';
 import {
   type FriendshipResponse,
   type PairingCodeResponse,
@@ -289,5 +290,68 @@ export const getPartnerDetails = async (
     email: partner.email,
     online: presence.online,
     lastSeenAt: presence.lastSeenAt,
+  };
+};
+
+export const unpairUsers = async (userId: string): Promise<{ success: boolean; unpairedUserId: string | null }> => {
+  const requesterId = ensureObjectId(userId);
+  const user = await UserModel.findById(requesterId);
+
+  if (user === null) {
+    throw new AppError({
+      statusCode: 404,
+      code: 'NOT_FOUND',
+      message: 'User not found',
+    });
+  }
+
+  const partnerId = user.pairing.partnerId;
+  const chatId = user.pairing.chatId;
+
+  if (partnerId === null || chatId === null) {
+    return { success: false, unpairedUserId: null };
+  }
+
+  const session = await mongoose.startSession();
+  try {
+    await session.withTransaction(async () => {
+      // 1. Clear pairing fields for both users
+      await UserModel.updateOne(
+        { _id: requesterId },
+        {
+          $set: {
+            'pairing.partnerId': null,
+            'pairing.chatId': null,
+          },
+        },
+        { session },
+      );
+
+      await UserModel.updateOne(
+        { _id: partnerId },
+        {
+          $set: {
+            'pairing.partnerId': null,
+            'pairing.chatId': null,
+          },
+        },
+        { session },
+      );
+
+      // 2. Remove friendship relationship in DB so they can pair again
+      const participantKey = createParticipantKey(requesterId, partnerId);
+      await FriendshipModel.deleteOne({ participantKey }).session(session);
+
+      // 3. Clear all messages and chat history for absolute privacy
+      await MessageModel.deleteMany({ chatId }).session(session);
+      await ChatModel.deleteOne({ _id: chatId }).session(session);
+    });
+  } finally {
+    await session.endSession();
+  }
+
+  return {
+    success: true,
+    unpairedUserId: partnerId.toString(),
   };
 };

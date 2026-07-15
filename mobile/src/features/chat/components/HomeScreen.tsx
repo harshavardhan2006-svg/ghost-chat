@@ -70,10 +70,11 @@ const formatLastSeen = (lastSeenAt: string | null): string => {
 };
 
 export const HomeScreen = () => {
-  const { accessToken, logout, user } = useAuthStore((state) => ({
+  const { accessToken, logout, user, updatePairingStatus } = useAuthStore((state) => ({
     accessToken: state.accessToken,
     logout: state.logout,
     user: state.user,
+    updatePairingStatus: state.updatePairingStatus,
   }));
 
   const navigateTo = useNavigationStore((state) => state.navigateTo);
@@ -200,8 +201,13 @@ export const HomeScreen = () => {
       }
     };
 
+    const handleUnpaired = () => {
+      updatePairingStatus(false, null, null);
+    };
+
     socket.on('online', handleOnline);
     socket.on('offline', handleOffline);
+    socket.on('unpaired', handleUnpaired);
 
     // Fallback status check every 12 seconds in case socket drops
     const pollInterval = setInterval(() => {
@@ -211,6 +217,7 @@ export const HomeScreen = () => {
     return () => {
       socket.off('online', handleOnline);
       socket.off('offline', handleOffline);
+      socket.off('unpaired', handleUnpaired);
       disconnectSocket();
       clearInterval(pollInterval);
     };
@@ -358,6 +365,24 @@ export const HomeScreen = () => {
             <Text style={styles.modalTitle}>Settings</Text>
 
             <View style={styles.modalActions}>
+              <GhostButton
+                label="Unpair Connection"
+                onPress={async () => {
+                  if (accessToken !== null) {
+                    try {
+                      setSettingsVisible(false);
+                      setLoading(true);
+                      await chatApi.unpair(accessToken);
+                      updatePairingStatus(false, null, null);
+                    } catch {
+                      // ignore
+                    } finally {
+                      setLoading(false);
+                    }
+                  }
+                }}
+                variant="danger"
+              />
               <GhostButton
                 label="Log Out"
                 onPress={async () => {

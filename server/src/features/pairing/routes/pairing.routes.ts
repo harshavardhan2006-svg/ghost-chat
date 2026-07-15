@@ -8,4 +8,5 @@ export const registerPairingRoutes = async (app: FastifyInstance): Promise<void>
   app.post('/pair', { preHandler: authenticate }, pairingController.pairWithCode);
   app.get('/status', { preHandler: authenticate }, pairingController.getStatus);
   app.get('/partner', { preHandler: authenticate }, pairingController.getPartnerDetails);
+  app.post('/unpair', { preHandler: authenticate }, pairingController.unpair);
 };

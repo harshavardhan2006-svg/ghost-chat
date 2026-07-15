@@ -14,6 +14,7 @@ export const socketEvents = {
   reply: 'reply',
   deleteMessage: 'delete-message',
   pairingCompleted: 'pairing-completed',
+  unpaired: 'unpaired',
   socketError: 'socket-error',
 } as const;
 

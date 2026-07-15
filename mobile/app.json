@@ -13,7 +13,13 @@
       "expo-secure-store"
     ],
     "extra": {
-      "apiUrl": "https://ghost-chat-backend-hq1v.onrender.com/api/v1"
+      "apiUrl": "https://ghost-chat-backend-hq1v.onrender.com/api/v1",
+      "eas": {
+        "projectId": "ea2ddf1c-e5d0-4667-a8e6-3f574889d296"
+      }
+    },
+    "android": {
+      "package": "com.harshavardhan20006.ghost"
     }
   }
 }
