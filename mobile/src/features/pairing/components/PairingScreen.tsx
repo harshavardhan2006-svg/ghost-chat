@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   Animated,
-  Clipboard,
   Keyboard,
   Share,
   StyleSheet,
@@ -11,6 +10,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Clipboard from 'expo-clipboard';
 
 import { GhostButton } from '../../../shared/components/GhostButton';
 import { colors, radii, spacing } from '../../../shared/theme/theme';
@@ -173,12 +173,12 @@ export const PairingScreen = () => {
   };
 
   // Trigger Copy Code
-  const handleCopyCode = () => {
+  const handleCopyCode = async () => {
     if (pairingCode === null) {
       return;
     }
 
-    Clipboard.setString(pairingCode);
+    await Clipboard.setStringAsync(pairingCode);
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
   };
