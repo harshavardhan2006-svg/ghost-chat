@@ -30,10 +30,8 @@ export const PairingScreen = () => {
   const [pairingError, setPairingError] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
 
-  const { accessToken, updatePairingStatus } = useAuthStore((state) => ({
-    accessToken: state.accessToken,
-    updatePairingStatus: state.updatePairingStatus,
-  }));
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const updatePairingStatus = useAuthStore((state) => state.updatePairingStatus);
 
   // Refs for 6 code inputs
   const inputRefs = useRef<Array<TextInput | null>>([]);

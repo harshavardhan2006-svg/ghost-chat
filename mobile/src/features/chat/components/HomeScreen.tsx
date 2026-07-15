@@ -70,12 +70,10 @@ const formatLastSeen = (lastSeenAt: string | null): string => {
 };
 
 export const HomeScreen = () => {
-  const { accessToken, logout, user, updatePairingStatus } = useAuthStore((state) => ({
-    accessToken: state.accessToken,
-    logout: state.logout,
-    user: state.user,
-    updatePairingStatus: state.updatePairingStatus,
-  }));
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const logout = useAuthStore((state) => state.logout);
+  const user = useAuthStore((state) => state.user);
+  const updatePairingStatus = useAuthStore((state) => state.updatePairingStatus);
 
   const navigateTo = useNavigationStore((state) => state.navigateTo);
 

@@ -515,15 +515,11 @@ const MessageItem = memo(
 // MAIN CHAT SCREEN
 // ==========================================
 export const ChatScreen = () => {
-  const { activeChatId, navigateTo } = useNavigationStore((state) => ({
-    activeChatId: state.activeChatId,
-    navigateTo: state.navigateTo,
-  }));
+  const activeChatId = useNavigationStore((state) => state.activeChatId);
+  const navigateTo = useNavigationStore((state) => state.navigateTo);
 
-  const { user, accessToken } = useAuthStore((state) => ({
-    user: state.user,
-    accessToken: state.accessToken,
-  }));
+  const user = useAuthStore((state) => state.user);
+  const accessToken = useAuthStore((state) => state.accessToken);
 
   const [loading, setLoading] = useState(true);
   const [partner, setPartner] = useState<any | null>(null);
