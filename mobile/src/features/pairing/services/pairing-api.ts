@@ -9,6 +9,7 @@ export const pairingApi = {
   generateCode: async (accessToken: string): Promise<PairingCodeResponse> =>
     requestApi<PairingCodeResponse>('/pairing/code', {
       method: 'POST',
+      body: {},
       accessToken,
     }),
 

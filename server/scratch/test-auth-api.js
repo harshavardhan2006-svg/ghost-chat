@@ -37,6 +37,28 @@ async function testAuth() {
 
     if (loginResponse.status === 200) {
       console.log("✅ Login API: WORKING PERFECTLY!");
+      
+      const token = loginData.data.tokens.accessToken;
+      console.log("Testing live /pairing/code endpoint...");
+      
+      const codeResponse = await fetch("https://ghost-chat-backend-hq1v.onrender.com/api/v1/pairing/code", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({})
+      });
+      
+      const codeData = await codeResponse.json();
+      console.log("Pairing Code Response status:", codeResponse.status);
+      console.log("Pairing Code Response body:", JSON.stringify(codeData, null, 2));
+      
+      if (codeResponse.status === 200 || codeResponse.status === 201) {
+        console.log("✅ Pairing Code Generation API: WORKING PERFECTLY!");
+      } else {
+        console.log("❌ Pairing Code Generation API: FAILED");
+      }
     } else {
       console.log("❌ Login API: FAILED");
     }

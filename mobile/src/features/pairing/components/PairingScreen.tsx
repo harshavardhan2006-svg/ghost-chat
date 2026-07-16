@@ -158,6 +158,7 @@ export const PairingScreen = () => {
     }
 
     setLoading(true);
+    setPairingError(null);
     try {
       const response = await pairingApi.generateCode(accessToken);
       setPairingCode(response.code);
@@ -283,6 +284,7 @@ export const PairingScreen = () => {
                 variant="secondary"
               />
             </View>
+            {pairingError !== null && <Text style={[styles.errorText, { marginTop: spacing.md, marginBottom: 0 }]}>{pairingError}</Text>}
           </View>
         )}
 
